@@ -1,0 +1,10 @@
+.tag {
+  font-size: 11px;
+
+  background-color: lawngreen;
+  margin: 2px;
+  /* float: left; */
+  /* display: inline-block; */
+  /* align-items: right; */
+  /* display: inline; */
+}

@@ -1,0 +1,10 @@
+1. make 2 copies of the given points
+2. sort 1 in x axis
+3. sort 2 in y axis
+4. let them be Px and Py
+
+-----XXX after pre processing XXX-----
+closest-pair(Px,Py)
+{
+    if
+}
