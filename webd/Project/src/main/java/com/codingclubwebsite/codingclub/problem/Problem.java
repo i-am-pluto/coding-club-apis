@@ -3,12 +3,15 @@ package com.codingclubwebsite.codingclub.problem;
 import javax.persistence.*;
 
 @Entity
-@Table(name="Problem")
 public class Problem {
     @Id
     private String problemId;
+
+    @Lob
     private String statement;
-    private int sno;
+    private String title;
+
+    private int  sno;
     private int diff;
     private int submissions;
     private int timeLimit;

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 public class ProblemController {
 
     @Autowired
@@ -31,10 +32,12 @@ public class ProblemController {
     * Get all problems
     * Get one problem
      */
+
     @PostMapping("/problemset/add")
     public PostRequestResponse addProblem(@RequestBody ProblemTemplate problemTemplate){
 
         Problem problem = generateProblemFromTemplate(problemTemplate);
+        problem.setSno((int) (problemRepository.count()+1));
         problemRepository.save(problem);
         return new PostRequestResponse("Request Accepted",problem.getProblemId(),"The request to add a problem was accepted");
 

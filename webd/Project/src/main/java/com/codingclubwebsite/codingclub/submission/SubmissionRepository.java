@@ -1,9 +1,9 @@
 package com.codingclubwebsite.codingclub.submission;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface SubmissionRepository extends CrudRepository {
-    List<SubmissionController> findAllByPending(Boolean pending);
+@Repository
+public interface SubmissionRepository extends CrudRepository<SubmissionEntity,String> {
+//    List<SubmissionEntity> findAllByPending(Boolean pending);
 }

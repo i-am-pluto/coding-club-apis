@@ -21,11 +21,11 @@ public class PostRequestResponse {
         this.status_message = status_message;
     }
 
-    public String getSubmissionID() {
+    public String getQueryId() {
         return queryId;
     }
 
-    public void setSubmissionID(String submissionID) {
+    public void setQueryId(String submissionID) {
         this.queryId = submissionID;
     }
 

@@ -1,18 +1,20 @@
 package com.codingclubwebsite.codingclub.submission;
 
-import com.codingclubwebsite.codingclub.problem.testCases.TestCase;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class SubmissionEntity {
+
     @Id
     private String submissionID;
     private String problemID;
     private String submissionStatus;
     private String userId;
     private String language;
+
+    @Lob
     private String code;
     private boolean pending;
     private int numberOfTestcasePassed;
@@ -22,27 +24,30 @@ public class SubmissionEntity {
     private String failedTestCaseCorrectInput;
     private String failedTestCaseCorrectOutput;
     private String userFailedOutput;
-
     public SubmissionEntity(){
 
     }
 
-    public SubmissionEntity(String submissionID, String problemID, String submissionStatus, String userId, String language, String code, boolean pending, int numberOfTestcasePassed, boolean isCompiled, String error, int numberOfTestCase, String failedTestCaseCorrectInput, String failedTestCaseCorrectOutput, String userFailedOutput) {
+    public SubmissionEntity(String submissionID, String problemID,String userId, String language, String code) {
 
         this.submissionID = submissionID;
         this.problemID = problemID;
-        this.submissionStatus = submissionStatus;
+        this.submissionStatus = "Pending";
         this.userId = userId;
         this.language = language;
         this.code = code;
-        this.pending = pending;
-        this.numberOfTestcasePassed = numberOfTestcasePassed;
-        this.isCompiled = isCompiled;
-        this.error = error;
-        this.numberOfTestCase = numberOfTestCase;
-        this.failedTestCaseCorrectInput = failedTestCaseCorrectInput;
-        this.failedTestCaseCorrectOutput = failedTestCaseCorrectOutput;
-        this.userFailedOutput = userFailedOutput;
+        this.pending = true;
+        this.numberOfTestcasePassed = 0;
+        this.isCompiled = false;
+        this.error = null;
+
+        // to be passed
+
+        this.numberOfTestCase = Integer.parseInt("");
+
+        this.failedTestCaseCorrectInput = null;
+        this.failedTestCaseCorrectOutput = null;
+        this.userFailedOutput = null;
 
     }
 
