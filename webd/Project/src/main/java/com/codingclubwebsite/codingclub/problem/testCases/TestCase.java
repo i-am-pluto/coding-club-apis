@@ -30,6 +30,8 @@ public class TestCase {
     }
 
     public String getInput() {
+        if (Input == null)
+            return "---No-Input---";
         return Input;
     }
 

@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface Executor {
     public FinalResult execute(String submissionId,int time , List<TestCase> testCaseList) throws IOException, InterruptedException;
-    
 }

@@ -1,0 +1,4 @@
+.game{
+    -fx-background-image: url("img/sky3.png");
+    -fx-background-size: cover;
+}

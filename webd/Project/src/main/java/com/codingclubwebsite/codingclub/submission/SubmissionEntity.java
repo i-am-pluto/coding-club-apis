@@ -8,8 +8,9 @@ import javax.persistence.Lob;
 public class SubmissionEntity {
 
     @Id
-    private String submissionID;
-    private String problemID;
+    private String submissionId;
+
+    private String problemId;
     private String submissionStatus;
     private String userId;
     private String language;
@@ -19,6 +20,8 @@ public class SubmissionEntity {
     private boolean pending;
     private int numberOfTestcasePassed;
     private boolean isCompiled;
+
+    @Lob
     private String error;
     private int numberOfTestCase;
     private String failedTestCaseCorrectInput;
@@ -28,10 +31,10 @@ public class SubmissionEntity {
 
     }
 
-    public SubmissionEntity(String submissionID, String problemID,String userId, String language, String code) {
+    public SubmissionEntity(String submissionId, String problemId, String userId, String language, String code) {
 
-        this.submissionID = submissionID;
-        this.problemID = problemID;
+        this.submissionId = submissionId;
+        this.problemId = problemId;
         this.submissionStatus = "Pending";
         this.userId = userId;
         this.language = language;
@@ -43,7 +46,7 @@ public class SubmissionEntity {
 
         // to be passed
 
-        this.numberOfTestCase = Integer.parseInt("");
+        this.numberOfTestCase = 0;
 
         this.failedTestCaseCorrectInput = null;
         this.failedTestCaseCorrectOutput = null;
@@ -135,20 +138,20 @@ public class SubmissionEntity {
         this.submissionStatus = submissionStatus;
     }
 
-    public String getSubmissionID() {
-        return submissionID;
+    public String getSubmissionId() {
+        return submissionId;
     }
 
-    public void setSubmissionID(String submissionID) {
-        this.submissionID = submissionID;
+    public void setSubmissionId(String submissionID) {
+        this.submissionId = submissionID;
     }
 
-    public String getProblemID() {
-        return problemID;
+    public String getProblemId() {
+        return problemId;
     }
 
-    public void setProblemID(String problemID) {
-        this.problemID = problemID;
+    public void setProblemId(String problemID) {
+        this.problemId = problemID;
     }
 
     public String getLanguage() {

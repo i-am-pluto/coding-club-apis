@@ -22,13 +22,16 @@ public class CppExecution implements Executor {
         * store the output
         * match the output
         * */
-        String dirPath = "tempfiles/"+submissionId;
-        String codeFilePath = "tempfiles/"+submissionId+"/"+"code.cpp";
+        String dirPath = "src/main/java/com/codingclubwebsite/codingclub/submission/CodeJudge/tempfiles/"+submissionId;
+        String codeFilePath = dirPath+"/"+"code.cpp";
         String commands = "cd " + dirPath + "\n" + "g++ -lm code.cpp 2>err.txt";
 
         File commandsFile = new File(dirPath+"/compile.sh");
         // comands file write
-        commandsFile.createNewFile();
+        if(!commandsFile.createNewFile()){
+
+            System.out.println("Commnads file created");
+        }
         FileWriter codeWriter = new FileWriter(dirPath+"/compile.sh");
         codeWriter.write(commands);
         codeWriter.close();
@@ -46,7 +49,15 @@ public class CppExecution implements Executor {
         if (errFile.length() != 0) {
             // return error
             //compilationError
-            FinalResult compilationError = new FinalResult(0,false,"Compilation Error",testCaseList.size(),null,null);
+            BufferedReader errReader = new BufferedReader(new FileReader(errFile));
+            String error="";
+            String temp;
+            while((temp=errReader.readLine())!=null){
+                error+=temp;
+            }
+            errReader.close();
+            FinalResult compilationError = new FinalResult(0,false,"Compilation Error:\n"+error,testCaseList.size(),null,null);
+//            System.out.println("Heyo");
             return compilationError;
         }
 
@@ -77,7 +88,7 @@ public class CppExecution implements Executor {
             if (codeRunner.isAlive()) {
                 codeRunner.destroy();
                 // send TLE
-                FinalResult timeLimitError = new FinalResult(count,true,"Time Limit Error",testCaseList.size(),testCase,null);
+                FinalResult timeLimitError = new FinalResult(count-1,true,"Time Limit Error",testCaseList.size(),testCase,null);
                 return timeLimitError;
             }
 
@@ -86,15 +97,19 @@ public class CppExecution implements Executor {
             BufferedReader outReader = new BufferedReader(new FileReader(outFile));
             String temp;
             while ((temp = outReader.readLine()) != null) {
-                output.concat(temp+"\n");
+                output+=(temp+"\n");
             }
             outReader.close();
-            output=output.substring(0,output.length()-2);
-
+            while(output.charAt(output.length()-1)=='\n'|| output.charAt(output.length()-1)==' ')
+                output = output.substring(0,output.length()-1);
+            String corrOutput = testCase.getOutput();
+            while(corrOutput.charAt(corrOutput.length()-1)=='\n' ||corrOutput.charAt(corrOutput.length()-1)==' ')
+                corrOutput = corrOutput.substring(0,corrOutput.length()-1);
             // match the outputs
-            if(output != testCase.getOutput()){
+            if(!output.equals(corrOutput)){
                 // testCaseFailed
-                FinalResult testCaseFailed= new FinalResult(count,true,"TestCase Failed",testCaseList.size(),testCase,output);
+                System.out.println(testCase.getOutput()+" "+output);
+                FinalResult testCaseFailed= new FinalResult(count-1,true,"TestCase Failed",testCaseList.size(),testCase,output);
                 return testCaseFailed;
             }
             count++;

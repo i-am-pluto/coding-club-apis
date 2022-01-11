@@ -6,6 +6,7 @@ import com.codingclubwebsite.codingclub.problem.testCases.TestCase;
 import com.codingclubwebsite.codingclub.problem.testCases.TestCaseRepository;
 import com.codingclubwebsite.codingclub.submission.CodeJudge.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,21 +14,62 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class Executable {
 
-    @Autowired
-    private ProblemRepository problemRepository;
-    @Autowired
-    private TestCaseRepository testCaseRepository;
-
+    private List<TestCase> testCases;
     private  SubmissionEntity submission;
+    private int timeLimit;
     private String lang;
     private String code;
 
-    public Executable(String lang, String code, SubmissionEntity submission) {
+    public Executable(List<TestCase> testCases, SubmissionEntity submission, int timeLimit, String lang, String code) {
+        this.testCases = testCases;
+        this.submission = submission;
+        this.timeLimit = timeLimit;
         this.lang = lang;
         this.code = code;
+    }
+
+    public List<TestCase> getTestCases() {
+        return testCases;
+    }
+
+    public void setTestCases(ArrayList<TestCase> testCases) {
+        this.testCases = testCases;
+    }
+
+    public SubmissionEntity getSubmission() {
+        return submission;
+    }
+
+    public void setSubmission(SubmissionEntity submission) {
         this.submission = submission;
+    }
+
+    public int getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public FinalResult codeJudge() throws IOException, InterruptedException {
@@ -39,25 +81,26 @@ public class Executable {
         * Generate Final Result
         * Return the result
          */
-        String path = "/CodeJudge/tempfiles/"+this.submission.getSubmissionID();
+        String path = "src/main/java/com/codingclubwebsite/codingclub/submission/CodeJudge/tempfiles/"+this.submission.getSubmissionId();
         File dir = new File(path);
-
+        System.out.println(dir.getAbsolutePath());
         if(!dir.mkdir()){
             // server-side error
-
+            System.out.println("Failed creating the files");
+            return new FinalResult(0,false,"Server-side Error",0,null,null);
         }
 
         // generate the code file inside the temp files folder
         String fileName = path+"/code";
         switch(lang){
             case "cpp":
-                fileName.concat(".cpp");
+                fileName+=(".cpp");
                 break;
             case "java":
-                fileName.concat(".java");
+                fileName+=(".java");
                 break;
             case "python":
-                fileName.concat(".py");
+                fileName+=(".py");
                 break;
         }
 
@@ -76,16 +119,8 @@ public class Executable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(this.submission.getProblemId());
 
-        // load the problem's test-cases
-        Problem problem = problemRepository.findById(this.submission.getProblemID()).get();
-
-        ArrayList<TestCase>testCases = new ArrayList<>();
-        for( TestCase testCase : testCaseRepository.findAllByProblemId(problem.getProblemId())){
-            testCases.add(testCase);
-        }
-
-        // run the execution according to the input test cases according to the lang
         Executor executor = null;
         switch (lang){
             case "cpp":
@@ -99,8 +134,8 @@ public class Executable {
                 break;
 
         }
-        List<TestCase> testCaseList = testCaseRepository.findAllByProblemId(submission.getProblemID());
-        FinalResult result = executor.execute(submission.getSubmissionID(),problem.getTimeLimit(),testCaseList);
+
+        FinalResult result = executor.execute(submission.getSubmissionId(),this.timeLimit,this.testCases);
         deleteDirectory(dir);
         return result;
     }
@@ -114,6 +149,7 @@ public class Executable {
             }
             subFile.delete();
         }
+        file.delete();
     }
 
 }
